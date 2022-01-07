@@ -276,6 +276,18 @@ describe('fast sourcemap concat', function() {
     });
   });
 
+  it("permits missing files", function() {
+    let s = new SourceMap({outputFile: 'tmp/test-short.js'});
+    s.addFile('fixtures/other/third.js');
+    s.addFile('fixtures/short/rewriter.js');
+    s.addFile('fixtures/other/foo-bar-baz-missing-file.js');
+    s.addFile('fixtures/other/fourth.js');
+    return s.end().then(function(){
+      expectFile('test-short.js').in('tmp');
+      expectFile('test-short.map').in('tmp');
+    });
+  });
+
   it("deals with missing newline followed by single newline", function() {
     let s = new SourceMap({outputFile: 'tmp/iife-wrapping.js'});
     s.addFile('fixtures/other/fourth.js');
